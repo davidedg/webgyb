@@ -2,7 +2,7 @@
 
 A web interface for viewing GMail backups created by [Got-Your-Back (GYB)](https://github.com/GAM-team/got-your-back)
 
-[![Build](https://img.shields.io/github/actions/workflow/status/davidedg/webgyb/docker-publish.yml?branch=main&logo=github&style=for-the-badge)](https://github.com/davidedg/webgyb/actions/workflows/docker.yml) [![davidedg/webgyb](https://img.shields.io/docker/pulls/davidedg/webgyb?style=for-the-badge&logo=docker)](https://hub.docker.com/r/davidedg/webgyb)
+[![Build](https://img.shields.io/github/actions/workflow/status/davidedg/webgyb/docker-publish.yml?branch=main&logo=github&style=for-the-badge)](https://github.com/davidedg/webgyb/actions/workflows/docker-publish.yml) [![davidedg/webgyb](https://img.shields.io/docker/pulls/davidedg/webgyb?style=for-the-badge&logo=docker)](https://hub.docker.com/r/davidedg/webgyb)
 
 
 <div align="center">
