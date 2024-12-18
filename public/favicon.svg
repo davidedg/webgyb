@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Background circle -->
+    <circle cx="16" cy="16" r="16" fill="#DB4437"/>
+    
+    <!-- Email envelope -->
+    <path d="M24 11L16 17L8 11V10L16 16L24 10V11Z" fill="white"/>
+    <path d="M24 22H8V10H24V22ZM9 21H23V11H9V21Z" fill="white"/>
+    
+    <!-- Backup arrow -->
+    <path d="M16 20L13 17H15V14H17V17H19L16 20Z" fill="white"/>
+</svg> 

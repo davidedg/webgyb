@@ -1,0 +1,30 @@
+{
+  "name": "webgyb",
+  "version": "1.0.0",
+  "description": "A modern web interface for viewing Gmail backups created by Got-Your-Back (GYB)",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@astrojs/markdown-remark": "^6.0.1",
+    "@astrojs/svelte": "5.0.0",
+    "@astrojs/tailwind": "5.0.3",
+    "astro": "4.0.7",
+    "better-sqlite3": "^9.2.0",
+    "mailparser": "^3.7.2",
+    "shiki": "1.24.2",
+    "svelte": "4.2.8",
+    "tailwindcss": "^3.3.6"
+  },
+  "devDependencies": {
+    "@astrojs/node": "7.0.0",
+    "@types/better-sqlite3": "^7.6.8",
+    "@types/mailparser": "^3.4.5",
+    "@types/node": "^20.10.3",
+    "typescript": "^5.3.2"
+  }
+}

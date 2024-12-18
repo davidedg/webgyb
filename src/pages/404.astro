@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content="WebGYB - A modern web interface for viewing GMail backups" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<title>404 - Page Not Found | WebGYB</title>
+	</head>
+	<body class="bg-gray-50">
+		<main class="flex min-h-screen flex-col items-center justify-center p-4 text-center">
+			<h1 class="text-6xl font-bold text-gray-800 mb-4">4😵4</h1>
+			<h2 class="text-2xl font-semibold text-gray-700 mb-6">Oops! This page is lost in the cloud...</h2>
+			
+			<div class="max-w-md space-y-4 text-gray-600">
+				<p class="text-lg">
+					Looks like this page got:
+				</p>
+				<ul class="space-y-2">
+					<li>❌ Marked as spam</li>
+					<li>📨 Sent to the wrong address</li>
+					<li>🗑️ Accidentally deleted</li>
+					<li>📁 Filed under "Never Existed"</li>
+				</ul>
+				
+				<p class="mt-8 italic">
+					Even GYB couldn't back this one up!
+				</p>
+			</div>
+
+			<a href="/" class="mt-8 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+				Back to the app
+			</a>
+		</main>
+	</body>
+</html>
+
+<style>
+	html {
+		font-family: system-ui, sans-serif;
+	}
+	main {
+		animation: fadeIn 0.5s ease-in;
+	}
+	@keyframes fadeIn {
+		from { opacity: 0; transform: translateY(-20px); }
+		to { opacity: 1; transform: translateY(0); }
+	}
+	ul li {
+		animation: slideIn 0.5s ease-out forwards;
+		opacity: 0;
+	}
+	@keyframes slideIn {
+		from { transform: translateX(-20px); opacity: 0; }
+		to { transform: translateX(0); opacity: 1; }
+	}
+	ul li:nth-child(1) { animation-delay: 0.1s; }
+	ul li:nth-child(2) { animation-delay: 0.2s; }
+	ul li:nth-child(3) { animation-delay: 0.3s; }
+	ul li:nth-child(4) { animation-delay: 0.4s; }
+</style> 

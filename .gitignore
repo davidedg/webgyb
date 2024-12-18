@@ -1,0 +1,4 @@
+node_modules
+/dist
+/accounts
+LOCAL_NOTES_*

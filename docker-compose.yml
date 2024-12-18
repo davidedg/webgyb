@@ -1,0 +1,26 @@
+services:
+  webgyb:
+    image: davidedg/webgyb:latest
+    container_name: webgyb
+    init: true
+    user: "1000:1000"
+    ports:
+      - "3000:3000"
+    volumes:
+      - /path/to/gyb/accounts:/app/accounts:ro
+      - /path/to/a/standalone/account1/app/accounts/account1:ro
+      - /path/to/a/standalone/account2/app/accounts/account2:ro
+    environment:
+      - PUID=1000
+      - PGID=1000      
+      - NODE_ENV=production
+      - HOST=0.0.0.0
+      - PORT=3000
+      - GYB_ACCOUNTS_DIR=/app/accounts
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s

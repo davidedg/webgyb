@@ -1,0 +1,251 @@
+---
+import LabelsPicker from '../components/LabelsPicker.svelte';
+import EmailPicker from '../components/EmailPicker.svelte';
+import EmailView from '../components/EmailView.svelte';
+import AccountSelector from '../components/AccountSelector.svelte';
+import { DatabaseManager } from '../lib/database';
+
+const db = DatabaseManager.getInstance();
+const accounts = db.getAvailableAccounts();
+const labels = accounts.length > 0 ? db.getLabels() : [];
+const accountsDir = db.getAccountsDirectory();
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebGYB - GMail backups viewer</title>
+    <meta name="description" content="WebGYB - A modern web interface for Got-Your-Back (GYB) GMail backups">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <style>
+        /* Custom responsive layout styles */
+        .app-layout {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            min-width: 1024px; /* Minimum width for the entire app */
+            min-height: 600px; /* Minimum height for the entire app */
+        }
+
+        .main-content {
+            display: flex;
+            flex: 1;
+            min-height: 400px; /* Minimum height for the main content */
+        }
+
+        .content-area {
+            display: flex;
+            flex: 1;
+            min-width: 760px;
+        }
+
+        /* Default layout (vertical) */
+        .content-wrapper {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-height: 400px; /* Minimum height for the content wrapper */
+        }
+
+        .content-wrapper > div:first-child {
+            flex: 1;
+        }
+
+        .content-wrapper > div:last-child {
+            flex: 2; /* Takes up 2/3 of the space in vertical layout */
+        }
+
+        /* Horizontal layout for wider screens */
+        @media (min-width: 1600px) {
+            .content-wrapper {
+                flex-direction: row;
+            }
+
+            /* Reset flex ratios for horizontal layout */
+            .content-wrapper > div:first-child,
+            .content-wrapper > div:last-child {
+                flex: 1;
+            }
+
+            /* Adjust component heights for horizontal layout */
+            :global(.email-picker-height) {
+                height: 100% !important;
+                min-width: 400px;
+                min-height: 400px; /* Minimum height for email list */
+            }
+
+            :global(.email-view-height) {
+                height: 100% !important;
+                min-width: 360px;
+                min-height: 400px; /* Minimum height for email view */
+            }
+        }
+
+        /* Add these styles */
+        .labels-wrapper {
+            flex-shrink: 0;
+            width: 16rem;
+            transition: width 0.3s ease;
+        }
+
+        @media (max-width: 800px) {
+            .labels-wrapper {
+                width: 0;
+                position: relative;
+            }
+        }
+    </style>
+</head>
+<body class="h-screen bg-gray-50">
+    <div class="app-layout">
+        <header class="bg-white shadow-sm flex-none">
+            <div class="max-w-[2000px] mx-0 px-4 py-2 sm:px-6 lg:px-8">
+                <div class="flex justify-left items-center">
+                    <div class="flex items-center gap-2 pr-[200px]">
+                        <span class="text-gray-600">Account:</span>
+                        <AccountSelector client:load />
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        {accounts.length > 0 ? (
+            <div class="main-content">
+                <div class="labels-wrapper">
+                    <LabelsPicker
+                        client:load
+                        labels={labels}
+                    />
+                </div>
+                
+                <div class="content-area">
+                    <div class="content-wrapper">
+                        <div class="flex-1 min-h-0">
+                            <EmailPicker client:load />
+                        </div>
+                        <div class="flex-1 min-h-0">
+                            <EmailView client:load />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        ) : (
+            <div class="flex-1 flex items-center justify-center p-8">
+                <div class="max-w-md text-center">
+                    <h2 class="text-2xl font-semibold text-gray-900 mb-4">No Email Accounts Found</h2>
+                    <p class="text-gray-600 mb-4">
+                        No accounts were found in the accounts directory. Please check that your accounts are properly set up.
+                    </p>
+                    <div class="bg-gray-100 rounded-lg p-4 text-sm text-gray-700 text-left">
+                        <p class="mb-2"><strong>Current accounts directory:</strong></p>
+                        <code class="block bg-white p-2 rounded mb-4">{accountsDir}</code>
+                        <p class="mb-2">You can configure a different location by setting the environment variable:</p>
+                        <code class="block bg-white p-2 rounded">GYB_ACCOUNTS_DIR=/path/to/accounts</code>
+                    </div>
+                </div>
+            </div>
+        )}
+    </div>
+
+    <script>
+        let currentLabel = '';
+        let currentPage = 1;
+        const pageSize = 30;
+        let currentSortField = 'date';
+        let currentSortOrder = 'desc';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Listen for label selection
+            document.addEventListener('gytweb:labelSelect', async (event) => {
+                const label = event.detail;
+                console.log('Label selected:', label);
+                currentLabel = label;
+                currentPage = 1;
+                await loadEmails();
+            });
+
+            // Listen for page changes
+            document.addEventListener('gytweb:pageChange', async (event) => {
+                const page = event.detail;
+                console.log('Page changed:', page);
+                currentPage = page;
+                await loadEmails();
+            });
+
+            // Listen for sort changes
+            document.addEventListener('gytweb:sort', async (event) => {
+                const { field, order } = event.detail;
+                console.log('Sort changed:', field, order);
+                currentSortField = field;
+                currentSortOrder = order;
+                await loadEmails();
+            });
+
+            // Listen for email selection
+            document.addEventListener('gytweb:emailSelect', async (event) => {
+                const uid = event.detail;
+                console.log('Email selected:', uid);
+                await loadEmail(uid);
+            });
+        });
+
+        async function loadEmails() {
+            if (!currentLabel) return;
+            
+            try {
+                console.log('Loading emails for label:', currentLabel);
+                const response = await fetch(
+                    `/api/emails?` + 
+                    `label=${encodeURIComponent(currentLabel)}&` +
+                    `page=${currentPage}&` +
+                    `pageSize=${pageSize}&` +
+                    `sortField=${currentSortField}&` +
+                    `sortOrder=${currentSortOrder}`
+                );
+                if (!response.ok) throw new Error('Failed to fetch emails');
+                
+                const data = await response.json();
+                console.log('Received emails:', data);
+                
+                // Dispatch event with email data
+                const event = new CustomEvent('gytweb:emailsLoaded', {
+                    detail: {
+                        emails: data.emails,
+                        totalEmails: data.total,
+                        currentPage: currentPage,
+                        sortOrder: currentSortOrder
+                    }
+                });
+                document.dispatchEvent(event);
+            } catch (error) {
+                console.error('Error loading emails:', error);
+            }
+        }
+
+        async function loadEmail(uid) {
+            try {
+                console.log('Loading email:', uid);
+                const response = await fetch(`/api/email/${encodeURIComponent(uid)}`);
+                if (!response.ok) throw new Error('Failed to fetch email');
+                
+                const data = await response.json();
+                console.log('Received email:', data);
+                
+                // Dispatch event with email data
+                const event = new CustomEvent('gytweb:emailLoaded', {
+                    detail: {
+                        email: data.email,
+                        originalEml: data.original
+                    }
+                });
+                document.dispatchEvent(event);
+            } catch (error) {
+                console.error('Error loading email:', error);
+            }
+        }
+    </script>
+</body>
+</html> 
