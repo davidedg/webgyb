@@ -34,8 +34,8 @@ A web interface for viewing GMail backups created by [Got-Your-Back (GYB)](https
 ## Docker Quick Start
 
 ```bash
-docker pull davidedg/gybweb
-docker run -d -p 3000:3000 -v "/path/to/gyb/accounts:/app/accounts" davidedg/gybweb
+docker pull davidedg/webgyb
+docker run -d -p 3000:3000 -v "/path/to/gyb/accounts:/app/accounts" davidedg/webgyb
 ```
 
 Where `/path/to/gyb/accounts` is the path to a directory structure like this:
