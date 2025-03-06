@@ -65,8 +65,8 @@ services:
       - "3000:3000"
     volumes:
       - /path/to/gyb/accounts:/app/accounts:ro
-      - /path/to/a/standalone/account1/app/accounts/account1:ro
-      - /path/to/a/standalone/account2/app/accounts/account2:ro
+      - /path/to/a/standalone/account1:/app/accounts/account1:ro
+      - /path/to/a/standalone/account2:/app/accounts/account2:ro
     environment:
       - PUID=1000
       - PGID=1000
