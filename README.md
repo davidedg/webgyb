@@ -61,6 +61,11 @@ services:
     container_name: webgyb
     init: true
     user: "1000:1000"
+    ipc: private
+    security_opt:
+      - no-new-privileges=true
+    cap_drop:
+      - ALL
     ports:
       - "3000:3000"
     volumes:
