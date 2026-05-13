@@ -18,8 +18,8 @@ const accountsDir = db.getAccountsDirectory();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WebGYB - GMail backups viewer</title>
     <meta name="description" content="WebGYB - A modern web interface for Got-Your-Back (GYB) GMail backups">
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="icon" type="image/png" href="favicon.png">
     <style>
         /* Custom responsive layout styles */
         .app-layout {
@@ -198,7 +198,7 @@ const accountsDir = db.getAccountsDirectory();
             try {
                 console.log('Loading emails for label:', currentLabel);
                 const response = await fetch(
-                    `/api/emails?` + 
+                    'api/emails?' +
                     `label=${encodeURIComponent(currentLabel)}&` +
                     `page=${currentPage}&` +
                     `pageSize=${pageSize}&` +
@@ -228,7 +228,7 @@ const accountsDir = db.getAccountsDirectory();
         async function loadEmail(uid) {
             try {
                 console.log('Loading email:', uid);
-                const response = await fetch(`/api/email/${encodeURIComponent(uid)}`);
+                const response = await fetch(`api/email/${encodeURIComponent(uid)}`);
                 if (!response.ok) throw new Error('Failed to fetch email');
                 
                 const data = await response.json();

@@ -221,7 +221,7 @@
                 <div>
                     <h2 class="text-lg font-semibold mb-1" class:text-red-700={email.subject === '(Subject not available)'}>{email.subject}</h2>
                     <div class="text-xs text-gray-600 space-y-0.5">
-                        <div>Message ID: <a href="/api/email/{email.uid}/download" class="text-blue-600 hover:text-blue-800 hover:underline" download>{email.uid}</a></div>
+                        <div>Message ID: <a href={`api/email/${email.uid}/download`} class="text-blue-600 hover:text-blue-800 hover:underline" download>{email.uid}</a></div>
                         <div>From: <span class:text-red-600={email.from === '(Sender not available)'}>{email.from}</span></div>
                         <div>To: <span class:text-red-600={email.to === '(Recipients not available)'}>{email.to}</span></div>
                         <div>Date: {email.date.toLocaleString()}</div>

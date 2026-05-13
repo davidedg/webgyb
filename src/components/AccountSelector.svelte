@@ -7,7 +7,7 @@
 
     onMount(async () => {
         try {
-            const response = await fetch('/api/accounts');
+            const response = await fetch('api/accounts');
             if (!response.ok) {
                 throw new Error('Failed to fetch accounts');
             }
@@ -29,7 +29,7 @@
         const accountName = select.value;
         
         try {
-            const response = await fetch('/api/accounts/select', {
+            const response = await fetch('api/accounts/select', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
