@@ -2,3 +2,4 @@ node_modules
 /dist
 /accounts
 LOCAL_NOTES_*
+CLAUDE.md
