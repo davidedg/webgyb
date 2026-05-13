@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1.4
 
 # Build stage with architecture-specific optimizations
-FROM --platform=$BUILDPLATFORM node:20-slim AS builder
+FROM --platform=$BUILDPLATFORM node:24-slim AS builder
 
 # Add build platform argument for better cross-compilation
 ARG TARGETPLATFORM
@@ -37,7 +37,7 @@ COPY . .
 RUN npm run build
 
 # Runtime stage
-FROM --platform=$TARGETPLATFORM node:20-slim AS runner
+FROM --platform=$TARGETPLATFORM node:24-slim AS runner
 
 # Install tini and curl with platform-specific considerations
 RUN apt-get update && \
