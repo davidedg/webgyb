@@ -1,17 +1,40 @@
 import type { APIRoute } from 'astro';
-import { DatabaseManager } from '../../lib/database';
+import { DatabaseManager, SORT_FIELDS, SORT_ORDERS } from '../../lib/database';
 import type { SortField, SortOrder } from '../../lib/database';
 import { parseEml, getEmlPath } from '../../lib/email-parser';
 import fs from 'fs';
+
+const DEFAULT_PAGE_SIZE = 30;
+const MAX_PAGE_SIZE = 100;
+
+function parsePositiveInt(value: string | null, fallback: number): number {
+    if (value === null || !/^\d+$/.test(value)) return fallback;
+    const n = Number(value);
+    return Number.isSafeInteger(n) && n >= 1 ? n : fallback;
+}
 
 export const GET: APIRoute = async ({ url }) => {
     try {
         const params = url.searchParams;
         const label = params.get('label');
-        const page = parseInt(params.get('page') || '1');
-        const pageSize = parseInt(params.get('pageSize') || '30');
-        const sortField = (params.get('sortField') || 'date') as SortField;
-        const sortOrder = (params.get('sortOrder') || 'desc') as SortOrder;
+        const page = parsePositiveInt(params.get('page'), 1);
+        const pageSize = Math.min(parsePositiveInt(params.get('pageSize'), DEFAULT_PAGE_SIZE), MAX_PAGE_SIZE);
+        const sortFieldParam = params.get('sortField') || 'date';
+        const sortOrderParam = params.get('sortOrder') || 'desc';
+
+        if (!(SORT_FIELDS as readonly string[]).includes(sortFieldParam) ||
+            !(SORT_ORDERS as readonly string[]).includes(sortOrderParam)) {
+            return new Response(JSON.stringify({
+                error: 'Invalid sort parameters'
+            }), {
+                status: 400,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        }
+        const sortField = sortFieldParam as SortField;
+        const sortOrder = sortOrderParam as SortOrder;
 
         if (!label) {
             return new Response(JSON.stringify({

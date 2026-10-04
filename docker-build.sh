@@ -135,6 +135,12 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+# Version shown in the UI (not set for "latest": package.json is used)
+VERSION_ARGS=()
+if [ "$VERSION" != "latest" ]; then
+    VERSION_ARGS=(--build-arg "APP_VERSION=${VERSION}")
+fi
+
 # Setup buildx
 setup_buildx() {
     log "info" "Setting up Docker Buildx..."
@@ -152,13 +158,13 @@ build_platform() {
     
     if [ "$PUSH" = true ]; then
         log "info" "Building and pushing for $platform..."
-        docker buildx build --platform "$platform" \
+        docker buildx build --platform "$platform" ${VERSION_ARGS[@]+"${VERSION_ARGS[@]}"} \
             -t "${REGISTRY}webgyb:${VERSION}-${tag_suffix}" \
             -t "${REGISTRY}webgyb:latest-${tag_suffix}" \
             --push .
     else
         log "info" "Building locally for $platform..."
-        docker buildx build --platform "$platform" \
+        docker buildx build --platform "$platform" ${VERSION_ARGS[@]+"${VERSION_ARGS[@]}"} \
             -t "webgyb:${tag_suffix}" \
             --load .
     fi
@@ -177,7 +183,7 @@ main() {
     if [ "$BUILD_ALL" = true ]; then
         if [ "$PUSH" = true ]; then
             log "info" "Building and pushing all architectures..."
-            docker buildx build --platform "$PLATFORMS" \
+            docker buildx build --platform "$PLATFORMS" ${VERSION_ARGS[@]+"${VERSION_ARGS[@]}"} \
                 -t "${REGISTRY}webgyb:${VERSION}" \
                 -t "${REGISTRY}webgyb:latest" \
                 --push .

@@ -26,7 +26,7 @@ export const GET: APIRoute = async ({ request }) => {
         });
     } catch (error) {
         console.error('API: Error searching senders:', error);
-        return new Response(JSON.stringify({ error: 'Failed to search senders', details: error.message }), {
+        return new Response(JSON.stringify({ error: 'Failed to search senders' }), {
             status: 500,
             headers: {
                 'Content-Type': 'application/json'

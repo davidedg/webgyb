@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { ParsedEmail } from '../lib/email-parser';
-    import { onMount } from 'svelte';
+    import { onMount, tick } from 'svelte';
     
     type ViewMode = 'safe' | 'original' | 'rendered';
     
@@ -11,11 +11,13 @@
     let showSafetyDialog = false;
 
     onMount(() => {
-        const handleEmailLoaded = (event: CustomEvent) => {
+        const handleEmailLoaded = async (event: CustomEvent) => {
             console.log('EmailView: Received email loaded event:', event.detail);
             email = event.detail.email;
             originalEml = event.detail.originalEml;
             if (email?.html) {
+                // Wait for the iframe to be mounted before writing into it
+                await tick();
                 renderEmailContent();
             }
         };
@@ -221,7 +223,7 @@
                 <div>
                     <h2 class="text-lg font-semibold mb-1" class:text-red-700={email.subject === '(Subject not available)'}>{email.subject}</h2>
                     <div class="text-xs text-gray-600 space-y-0.5">
-                        <div>Message ID: <a href="/api/email/{email.uid}/download" class="text-blue-600 hover:text-blue-800 hover:underline" download>{email.uid}</a></div>
+                        <div>Message ID: <a href={`api/email/${email.uid}/download`} class="text-blue-600 hover:text-blue-800 hover:underline" download>{email.uid}</a></div>
                         <div>From: <span class:text-red-600={email.from === '(Sender not available)'}>{email.from}</span></div>
                         <div>To: <span class:text-red-600={email.to === '(Recipients not available)'}>{email.to}</span></div>
                         <div>Date: {email.date.toLocaleString()}</div>
@@ -260,7 +262,7 @@
             </div>
         </div>
 
-        <div class="flex-grow overflow-hidden {viewMode !== 'original' ? 'p-4' : ''}">
+        <div class="grow overflow-hidden {viewMode !== 'original' ? 'p-4' : ''}">
             {#if viewMode === 'original'}
                 {#if originalEml}
                     <pre class="whitespace-pre-wrap font-mono text-sm h-full overflow-y-auto p-4 max-w-full break-all overflow-x-hidden" style="word-break: break-all; overflow-wrap: break-word;">{originalEml}</pre>

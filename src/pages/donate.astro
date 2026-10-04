@@ -1,4 +1,5 @@
 ---
+import "../styles/global.css";
 const sponsors = [
     { amount: 5, description: "Buy me a coffee ☕" },
     { amount: 10, description: "Bronze Supporter 🥉" },
@@ -15,7 +16,7 @@ const sponsors = [
     <title>Support WebGYB</title>
 </head>
 <body>
-    <div class="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="min-h-screen bg-linear-to-br from-purple-50 to-pink-50 py-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-3xl mx-auto">
             <div class="text-center mb-12">
                 <h1 class="text-4xl font-bold text-gray-900 mb-4">
@@ -46,7 +47,7 @@ const sponsors = [
                                 </svg>
                             </div>
                         </div>
-                        <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-500 to-pink-500 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></div>
+                        <div class="absolute bottom-0 left-0 right-0 h-1 bg-linear-to-r from-purple-500 to-pink-500 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></div>
                     </button>
                 ))}
             </div>
@@ -67,7 +68,7 @@ const sponsors = [
         </div>
     </div>
 
-    <a href="/" class="fixed top-4 left-4 text-gray-600 hover:text-gray-900 flex items-center">
+    <a href="./" class="fixed top-4 left-4 text-gray-600 hover:text-gray-900 flex items-center">
         <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
         </svg>

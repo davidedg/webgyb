@@ -2,6 +2,8 @@
     import { onMount } from 'svelte';
     import type { DatabaseManager } from '../lib/database';
 
+    const appVersion = __APP_VERSION__;
+
     export let labels: string[] = [];
     let selectedLabel: string | null = null;
     let highlightedLabels: Set<string> = new Set();
@@ -18,7 +20,7 @@
             try {
                 // Fetch system info
                 console.log('Fetching system info...');
-                const response = await fetch('/api/system-info');
+                const response = await fetch('api/system-info');
                 console.log('System info response:', response.status);
                 if (response.ok) {
                     const data = await response.json();
@@ -143,7 +145,7 @@
             </div>
 
             <!-- Regular Labels -->
-            <div class="flex-grow min-h-[200px] overflow-y-auto">
+            <div class="grow min-h-[200px] overflow-y-auto">
                 {#each organizedLabels.regular.sort() as label}
                     <button
                         class="w-full text-left px-2.5 py-1.5 rounded-lg mb-0.5 hover:bg-gray-200 transition-colors text-sm"
@@ -172,8 +174,11 @@
                 <div class="mb-2">
                     <span class="font-medium">GYB DB Version:</span> {systemInfo.dbVersion}
                 </div>
-                <a href="/donate" class="donation-link">
-                    <div class="flex items-center justify-center mt-3 p-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all">
+                <div class="mb-2 text-gray-400">
+                    WebGYB v{appVersion}
+                </div>
+                <a href="donate" class="donation-link">
+                    <div class="flex items-center justify-center mt-3 p-2 bg-linear-to-r from-purple-500 to-pink-500 text-white rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all">
                         <svg class="w-4 h-4 mr-2" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
                         </svg>
