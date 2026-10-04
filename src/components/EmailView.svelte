@@ -260,7 +260,7 @@
             </div>
         </div>
 
-        <div class="flex-grow overflow-hidden {viewMode !== 'original' ? 'p-4' : ''}">
+        <div class="grow overflow-hidden {viewMode !== 'original' ? 'p-4' : ''}">
             {#if viewMode === 'original'}
                 {#if originalEml}
                     <pre class="whitespace-pre-wrap font-mono text-sm h-full overflow-y-auto p-4 max-w-full break-all overflow-x-hidden" style="word-break: break-all; overflow-wrap: break-word;">{originalEml}</pre>

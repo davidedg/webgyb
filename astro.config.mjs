@@ -1,14 +1,17 @@
 import { defineConfig, passthroughImageService } from 'astro/config';
 import svelte from '@astrojs/svelte';
-import tailwind from '@astrojs/tailwind';
+import tailwindcss from '@tailwindcss/vite';
 import node from '@astrojs/node';
 
 export default defineConfig({
-  integrations: [svelte(), tailwind()],
+  integrations: [svelte()],
   output: 'server',
   adapter: node({
     mode: 'standalone'
   }),
+  vite: {
+    plugins: [tailwindcss()]
+  },
   // The app does not use astro:assets: avoid server-side image processing (sharp)
   image: {
     service: passthroughImageService()

@@ -1,0 +1,21 @@
+@import 'tailwindcss';
+
+/*
+  Tailwind v3 compatibility:
+  - the default border color changed to `currentcolor` in v4
+  - buttons use `cursor: default` in v4
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+}
