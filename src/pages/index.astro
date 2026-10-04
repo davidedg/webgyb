@@ -109,9 +109,6 @@ const accountsDir = db.getAccountsDirectory();
                         <span class="text-gray-600">Account:</span>
                         <AccountSelector client:load />
                     </div>
-                    {accounts.length === 0 && (
-                        <span class="ml-auto text-xs text-gray-400">WebGYB v{__APP_VERSION__}</span>
-                    )}
                 </div>
             </div>
         </header>
@@ -137,7 +134,8 @@ const accountsDir = db.getAccountsDirectory();
                 </div>
             </div>
         ) : (
-            <div class="flex-1 flex items-center justify-center p-8">
+            <div class="relative flex-1 flex items-center justify-center p-8">
+                <span class="absolute top-2 left-4 sm:left-6 lg:left-8 text-xs text-gray-400">WebGYB v{__APP_VERSION__}</span>
                 <div class="max-w-md text-center">
                     <h2 class="text-2xl font-semibold text-gray-900 mb-4">No Email Accounts Found</h2>
                     <p class="text-gray-600 mb-4">
