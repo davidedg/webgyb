@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { ParsedEmail } from '../lib/email-parser';
-    import { onMount } from 'svelte';
+    import { onMount, tick } from 'svelte';
     
     type ViewMode = 'safe' | 'original' | 'rendered';
     
@@ -11,11 +11,13 @@
     let showSafetyDialog = false;
 
     onMount(() => {
-        const handleEmailLoaded = (event: CustomEvent) => {
+        const handleEmailLoaded = async (event: CustomEvent) => {
             console.log('EmailView: Received email loaded event:', event.detail);
             email = event.detail.email;
             originalEml = event.detail.originalEml;
             if (email?.html) {
+                // Wait for the iframe to be mounted before writing into it
+                await tick();
                 renderEmailContent();
             }
         };
