@@ -33,6 +33,8 @@ RUN npm ci --no-audit --no-fund
 
 # Copy source files and build the application
 COPY . .
+# Version shown in the UI (e.g. the release tag); defaults to package.json
+ARG APP_VERSION
 RUN npm run build
 
 # Production dependencies stage: runs on the target platform, so native

@@ -2,6 +2,8 @@
     import { onMount } from 'svelte';
     import type { DatabaseManager } from '../lib/database';
 
+    const appVersion = __APP_VERSION__;
+
     export let labels: string[] = [];
     let selectedLabel: string | null = null;
     let highlightedLabels: Set<string> = new Set();
@@ -171,6 +173,9 @@
                 </div>
                 <div class="mb-2">
                     <span class="font-medium">GYB DB Version:</span> {systemInfo.dbVersion}
+                </div>
+                <div class="mb-2 text-gray-400">
+                    WebGYB v{appVersion}
                 </div>
                 <a href="donate" class="donation-link">
                     <div class="flex items-center justify-center mt-3 p-2 bg-linear-to-r from-purple-500 to-pink-500 text-white rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all">
