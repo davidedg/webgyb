@@ -3,3 +3,4 @@ node_modules
 /accounts
 LOCAL_NOTES_*
 CLAUDE.md
+.astro

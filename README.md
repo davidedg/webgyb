@@ -54,6 +54,13 @@ The application will be available at `http://localhost:3000`
 
 ## Docker Compose Quick Start
 
+> [!WARNING]
+> **WebGYB has no built-in authentication.** Anyone who can reach its port can read and download every email in the mounted backups.
+> Do not expose it to untrusted networks or to the Internet. Either:
+> - publish the port on the loopback interface only (`"127.0.0.1:3000:3000"` instead of `"3000:3000"`), or
+> - put it behind a reverse proxy that enforces authentication (e.g. Basic Auth, OAuth2 proxy, Authelia), or
+> - restrict access with a firewall / VPN.
+
 ```yaml
 services:
   webgyb:

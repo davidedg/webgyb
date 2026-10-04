@@ -15,8 +15,10 @@ interface CountResult {
     count: number;
 }
 
-export type SortField = 'date' | 'from' | 'subject';
-export type SortOrder = 'asc' | 'desc';
+export const SORT_FIELDS = ['date', 'from', 'subject'] as const;
+export const SORT_ORDERS = ['asc', 'desc'] as const;
+export type SortField = typeof SORT_FIELDS[number];
+export type SortOrder = typeof SORT_ORDERS[number];
 
 export class DatabaseManager {
     private db: DatabaseType | null = null;
@@ -134,19 +136,17 @@ export class DatabaseManager {
         this.ensureConnection();
         const offset = (page - 1) * pageSize;
         
-        // Build the ORDER BY clause based on the sort field
+        // Never interpolate caller input into SQL: map it to fixed literals
+        const direction = sortOrder === 'asc' ? 'ASC' : 'DESC';
+
+        // Build the ORDER BY clause based on the sort field.
+        // 'from' and 'subject' live in the EML files, so all fields sort by date for now.
         let orderBy: string;
         switch (sortField) {
             case 'date':
-                orderBy = `m.message_internaldate ${sortOrder}`;
-                break;
             case 'from':
-                // Since 'from' is in the EML file, we'll still sort by date
-                orderBy = `m.message_internaldate ${sortOrder}`;
-                break;
             case 'subject':
-                // Since 'subject' is in the EML file, we'll still sort by date
-                orderBy = `m.message_internaldate ${sortOrder}`;
+                orderBy = `m.message_internaldate ${direction}`;
                 break;
             default:
                 orderBy = 'm.message_internaldate DESC';
@@ -209,16 +209,6 @@ export class DatabaseManager {
             value: string;
         }
 
-        // Log table structure
-        const tableInfoStmt = this.db!.prepare("SELECT sql FROM sqlite_master WHERE type='table' AND name='settings'");
-        const tableInfo = tableInfoStmt.get();
-        console.log('Settings table structure:', tableInfo);
-
-        // Log some sample data
-        const sampleDataStmt = this.db!.prepare("SELECT * FROM settings LIMIT 1");
-        const sampleData = sampleDataStmt.get();
-        console.log('Sample settings data:', sampleData);
-
         const emailStmt = this.db!.prepare("SELECT value as value FROM settings WHERE name = 'email_address'");
         const versionStmt = this.db!.prepare("SELECT value as value FROM settings WHERE name = 'db_version'");
         const totalStmt = this.db!.prepare("SELECT COUNT(*) as count FROM messages");
@@ -226,8 +216,6 @@ export class DatabaseManager {
         const emailRow = emailStmt.get() as SettingRow;
         const versionRow = versionStmt.get() as SettingRow;
         const totalRow = totalStmt.get() as CountResult;
-
-        console.log('DB Info:', { emailRow, versionRow, totalRow });
 
         return {
             emailAddress: emailRow?.value || 'Unknown',
