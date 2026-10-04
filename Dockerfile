@@ -59,6 +59,7 @@ COPY package.json .
 ENV HOST=0.0.0.0 \
     PORT=3000 \
     NODE_ENV=production \
+    BASE_PATH="" \
     TINI_SUBREAPER=true \
     NODE_OPTIONS="--max-old-space-size=1024"
 
