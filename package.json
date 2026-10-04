@@ -14,7 +14,7 @@
     "@astrojs/svelte": "^9.0.1",
     "@tailwindcss/vite": "^4.3.3",
     "astro": "^7.3.5",
-    "better-sqlite3": "^12.10.0",
+    "better-sqlite3": "^13.0.3",
     "mailparser": "^3.9.35",
     "svelte": "^5.57.1",
     "tailwindcss": "^4.3.3"
