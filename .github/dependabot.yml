@@ -10,11 +10,23 @@ updates:
         update-types:
           - "minor"
           - "patch"
+    ignore:
+      # @astrojs/svelte supports TypeScript up to 6; TypeScript 7 is the
+      # native compiler without the JS API used by the Astro/Svelte tooling
+      - dependency-name: "typescript"
+        versions: [">=7"]
+      # Keep the Node.js types on the runtime's major (Node 24, see Dockerfile)
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
+    groups:
+      github-actions:
+        patterns:
+          - "*"
 
   - package-ecosystem: "docker"
     directory: "/"

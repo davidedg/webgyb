@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1.4
 
 # Node.js major versions. Node 24 has no official linux/arm/v7 images,
-# so 32-bit ARM uses the previous LTS (Astro requires Node >= 22.12).
+# so 32-bit ARM uses the previous LTS (node:sqlite requires Node >= 22.13).
 ARG NODE_VERSION=24
 ARG NODE_VERSION_ARMV7=22
 
@@ -37,21 +37,12 @@ COPY . .
 ARG APP_VERSION
 RUN npm run build
 
-# Production dependencies stage: runs on the target platform, so native
-# modules (better-sqlite3) and platform-specific packages match the
-# architecture of the final image
+# Production dependencies stage: runs on the target platform, so
+# platform-specific packages match the architecture of the final image.
+# SQLite comes from Node's built-in node:sqlite module, so nothing is compiled.
 FROM base-${TARGETARCH} AS deps
 
 WORKDIR /app
-
-# Build tools for native modules when no prebuilt binary is available
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-    gcc \
-    g++ \
-    make \
-    python3 \
-    && rm -rf /var/lib/apt/lists/*
 
 RUN npm config set fund false && \
     npm config set update-notifier false
