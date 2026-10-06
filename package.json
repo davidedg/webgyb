@@ -1,6 +1,6 @@
 {
   "name": "webgyb",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "A modern web interface for viewing Gmail backups created by Got-Your-Back (GYB)",
   "type": "module",
   "engines": {
