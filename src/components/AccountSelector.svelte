@@ -19,7 +19,7 @@
                 error = 'No accounts found. Please check your accounts directory.';
             }
         } catch (err) {
-            error = err.message;
+            error = err instanceof Error ? err.message : String(err);
             console.error('Error loading accounts:', err);
         }
     });
@@ -54,7 +54,7 @@
             // Reload the page to refresh all data
             window.location.reload();
         } catch (err) {
-            error = err.message;
+            error = err instanceof Error ? err.message : String(err);
             console.error('Error switching account:', err);
         }
     }

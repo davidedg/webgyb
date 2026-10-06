@@ -10,6 +10,7 @@
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build",
+    "check": "astro check && svelte-check --tsconfig ./tsconfig.json",
     "preview": "astro preview"
   },
   "dependencies": {
@@ -22,8 +23,10 @@
     "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.10",
     "@types/mailparser": "^3.4.5",
     "@types/node": "^24.0.0",
+    "svelte-check": "^4.7.6",
     "typescript": "^5.3.2"
   },
   "allowScripts": {

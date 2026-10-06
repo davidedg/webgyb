@@ -1,5 +1,4 @@
 import { simpleParser } from 'mailparser';
-import type { ParsedMail } from 'mailparser';
 import { DatabaseManager } from './database';
 import path from 'path';
 

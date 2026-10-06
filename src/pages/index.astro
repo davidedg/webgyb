@@ -227,7 +227,7 @@ const accountsDir = db.getAccountsDirectory();
             }
         }
 
-        async function loadEmail(uid) {
+        async function loadEmail(uid: string) {
             try {
                 console.log('Loading email:', uid);
                 const response = await fetch(`api/email/${encodeURIComponent(uid)}`);
