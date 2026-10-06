@@ -1,5 +1,4 @@
-import Database from 'better-sqlite3';
-import type { Database as DatabaseType } from 'better-sqlite3';
+import { DatabaseSync } from 'node:sqlite';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 
@@ -21,7 +20,7 @@ export type SortField = typeof SORT_FIELDS[number];
 export type SortOrder = typeof SORT_ORDERS[number];
 
 export class DatabaseManager {
-    private db: DatabaseType | null = null;
+    private db: DatabaseSync | null = null;
     private static instance: DatabaseManager;
     private currentAccount: string | null = null;
     private accountsDir: string;
@@ -51,10 +50,10 @@ export class DatabaseManager {
         const dbPath = `${this.accountsDir}/${accountName}/msg-db.sqlite`;
         
         // Open database in readonly mode
-        this.db = new Database(dbPath, { readonly: true, fileMustExist: true });
+        this.db = new DatabaseSync(dbPath, { readOnly: true });
         
         // Ensure foreign keys are enabled
-        this.db.pragma('foreign_keys = ON');
+        this.db.exec('PRAGMA foreign_keys = ON');
         
         // Additional safety: explicitly prevent any write operations
         this.db.function('prevent_write', () => {
@@ -162,7 +161,7 @@ export class DatabaseManager {
             LIMIT ? OFFSET ?
         `);
         
-        const messages = stmt.all(label, pageSize, offset) as EmailMessage[];
+        const messages = stmt.all(label, pageSize, offset) as unknown as EmailMessage[];
         
         // Get labels for each message
         const labelStmt = this.db!.prepare('SELECT label FROM labels WHERE message_num = ?');
@@ -180,7 +179,7 @@ export class DatabaseManager {
             JOIN labels l ON m.message_num = l.message_num
             WHERE l.label = ?
         `);
-        const result = stmt.get(label) as CountResult;
+        const result = stmt.get(label) as unknown as CountResult;
         return result.count;
     }
 
@@ -193,7 +192,7 @@ export class DatabaseManager {
             WHERE u.uid = ?
         `);
         
-        const message = stmt.get(uid) as EmailMessage | null;
+        const message = stmt.get(uid) as unknown as EmailMessage | undefined;
         if (!message) return null;
 
         const labelStmt = this.db!.prepare('SELECT label FROM labels WHERE message_num = ?');
@@ -213,9 +212,9 @@ export class DatabaseManager {
         const versionStmt = this.db!.prepare("SELECT value as value FROM settings WHERE name = 'db_version'");
         const totalStmt = this.db!.prepare("SELECT COUNT(*) as count FROM messages");
 
-        const emailRow = emailStmt.get() as SettingRow;
-        const versionRow = versionStmt.get() as SettingRow;
-        const totalRow = totalStmt.get() as CountResult;
+        const emailRow = emailStmt.get() as unknown as SettingRow | undefined;
+        const versionRow = versionStmt.get() as unknown as SettingRow | undefined;
+        const totalRow = totalStmt.get() as unknown as CountResult | undefined;
 
         return {
             emailAddress: emailRow?.value || 'Unknown',
