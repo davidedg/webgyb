@@ -63,7 +63,7 @@
             acc.regular.push(label);
         }
         return acc;
-    }, { special: [], regular: [] as string[] });
+    }, { special: [] as string[], regular: [] as string[] });
 
     // Sort special labels according to predefined order
     $: sortedSpecialLabels = organizedLabels.special.sort((a, b) => 
