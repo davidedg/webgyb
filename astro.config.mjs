@@ -9,8 +9,23 @@ import { readFileSync } from 'node:fs';
 const pkg = JSON.parse(readFileSync(new URL('./package.json', import.meta.url), 'utf-8'));
 const appVersion = process.env.APP_VERSION || pkg.version;
 
+// Production builds bundle every dependency into dist/server, so the server
+// runs without node_modules. Dev mode keeps them external: several are
+// CommonJS packages that Vite's dev server cannot load as bundled modules.
+/** @type {import('astro').AstroIntegration} */
+const bundleDependencies = {
+  name: 'bundle-dependencies',
+  hooks: {
+    'astro:config:setup': ({ command, updateConfig }) => {
+      if (command === 'build') {
+        updateConfig({ vite: { ssr: { noExternal: true } } });
+      }
+    }
+  }
+};
+
 export default defineConfig({
-  integrations: [svelte()],
+  integrations: [svelte(), bundleDependencies],
   output: 'server',
   adapter: node({
     mode: 'standalone'

@@ -36,3 +36,10 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      # The server bundles its dependencies (astro.config.mjs) and the Docker
+      # image ships without node_modules: check that the build runs that way
+      - name: Smoke test without node_modules
+        run: |
+          rm -rf node_modules
+          node scripts/smoke-test.mjs

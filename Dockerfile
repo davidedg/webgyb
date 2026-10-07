@@ -10,8 +10,9 @@ FROM node:${NODE_VERSION}-slim AS base-amd64
 FROM node:${NODE_VERSION}-slim AS base-arm64
 FROM node:${NODE_VERSION_ARMV7}-slim AS base-arm
 
-# Build stage: runs natively on the build platform (the build output is
-# plain JavaScript, so it does not depend on the target architecture)
+# Build stage: runs natively on the build platform. The build output is
+# plain JavaScript with every dependency bundled in (see astro.config.mjs),
+# so it does not depend on the target architecture and needs no node_modules.
 FROM --platform=$BUILDPLATFORM node:${NODE_VERSION}-slim AS builder
 
 ARG TARGETPLATFORM
@@ -37,19 +38,6 @@ COPY . .
 ARG APP_VERSION
 RUN npm run build
 
-# Production dependencies stage: runs on the target platform, so
-# platform-specific packages match the architecture of the final image.
-# SQLite comes from Node's built-in node:sqlite module, so nothing is compiled.
-FROM base-${TARGETARCH} AS deps
-
-WORKDIR /app
-
-RUN npm config set fund false && \
-    npm config set update-notifier false
-
-COPY package.json package-lock.json ./
-RUN npm ci --omit=dev --no-audit --no-fund
-
 # Runtime stage
 FROM base-${TARGETARCH} AS runner
 
@@ -63,9 +51,8 @@ RUN apt-get update && \
 
 WORKDIR /app
 
-# Copy only production files (owned by root, read-only for the app user)
+# Copy only the build output (owned by root, read-only for the app user)
 COPY --from=builder /app/dist ./dist
-COPY --from=deps /app/node_modules ./node_modules
 COPY package.json .
 
 # Set environment variables
