@@ -14,12 +14,12 @@
     "preview": "astro preview"
   },
   "dependencies": {
-    "@astrojs/node": "^11.1.6",
+    "@astrojs/node": "^11.1.7",
     "@astrojs/svelte": "^9.0.1",
     "@tailwindcss/vite": "^4.3.3",
-    "astro": "^7.3.5",
-    "mailparser": "^3.9.35",
-    "svelte": "^5.57.1",
+    "astro": "^7.3.7",
+    "mailparser": "^3.9.36",
+    "svelte": "^5.57.2",
     "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
